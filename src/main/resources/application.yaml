@@ -1,0 +1,19 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://admin1:admin1@cluster0.o9jgpte.mongodb.net/moviemanagement?retryWrites=true&w=majority&appName=Cluster0
+
+  cloud:
+    kubernetes:
+      discovery:
+        register: true
+
+      config:
+        enabled: true
+        sources:
+          - namespace: default
+            name: movie-db-config
+      reload:
+        enabled: true
+        mode: polling
+        period: 1000

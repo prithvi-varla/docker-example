@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: docker-example-deployment
+  namespace: default
+  labels:
+    app: docker-example-sample-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: docker-example-sample-app
+  template:
+    metadata:
+      labels:
+        app: docker-example-sample-app
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "3000"
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values:
+                      - amd64
+                      - arm64
+      containers:
+        - name: docker-example
+          image: ghcr.io/prithvi-varla/docker-example:${COMMIT}
+          ports:
+            - name: http
+              containerPort: 3000
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: 256m
+              memory: 512Mi
+            requests:
+              cpu: 256m
+              memory: 512Mi
+      imagePullSecrets:
+        - name: ghcr-cred
