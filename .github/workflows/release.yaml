@@ -9,7 +9,7 @@ jobs:
 
   pre-release:
     name: Pre-Release
-    uses: ./.github/workflows/build-and-push.yaml
+    uses: ./.github/workflows/publish-and-push.yaml
 
   deploy:
     name: Deploy
