@@ -1,15 +1,15 @@
 name: CD
 
 on:
-  push:
+  pull_request:
     branches: [master]
   workflow_dispatch:
 
 jobs:
 
-  pre-release:
-    name: Pre-Release
-    uses: ./.github/workflows/publish-and-push.yaml
+  #pre-release:
+  #  name: Pre-Release
+  #  uses: ./.github/workflows/publish-and-push.yml
 
   deploy:
     name: Deploy
@@ -22,7 +22,7 @@ jobs:
       max-parallel: 2
       matrix:
         environment: [Dev]
-        region: [eu-west-1]
+        region: [us-east-2]
     environment:
       name: ${{ matrix.environment }}
     steps:
