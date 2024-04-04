@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
+
   pre-release:
     name: Pre-Release
     uses: ./.github/workflows/build-and-push.yaml
