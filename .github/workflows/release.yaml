@@ -11,11 +11,6 @@ on:
       - completed
 
 jobs:
-
-  #pre-release:
-  #  name: Pre-Release
-  #  uses: ./.github/workflows/publish-and-push.yml
-
   deploy:
     name: Deploy
     needs: pre-release
@@ -30,6 +25,7 @@ jobs:
         region: [us-east-2]
     environment:
       name: ${{ matrix.environment }}
+
     steps:
       - name: Download Deployment Artifacts
         uses: actions/download-artifact@v3
