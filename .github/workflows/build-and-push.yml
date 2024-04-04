@@ -21,10 +21,10 @@ jobs:
       commit: ${{ steps.push-image.outputs.commit }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Build Docker Image
-        run: docker build . --file Dockerfile --tag $IMAGE_NAME
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - if: github.event_name != 'pull_request'
         name: Push Docker Image
