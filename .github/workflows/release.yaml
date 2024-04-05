@@ -12,13 +12,13 @@ on:
 
 jobs:
 
-  pre-release:
-    name: Pre-Release
-    uses: ./.github/workflows/publish-and-push.yml
+  #pre-release:
+  #  name: Pre-Release
+  #  uses: ./.github/workflows/publish-and-push.yml
 
   deploy:
     name: Deploy
-    needs: pre-release
+   # needs: pre-release
     permissions:
       id-token: write
     runs-on: ubuntu-latest
