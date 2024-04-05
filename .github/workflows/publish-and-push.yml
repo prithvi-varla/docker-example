@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write
+      packages: read
     outputs:
       commit: ${{ steps.push-image.outputs.commit }}
     steps:
