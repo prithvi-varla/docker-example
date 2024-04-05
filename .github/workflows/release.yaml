@@ -10,6 +10,14 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      max-parallel: 2
+      matrix:
+        environment: [Dev]
+        region: [us-east-2]
+    environment:
+      name: ${{ matrix.environment }}
     steps:
       - name: Download Deployment Artifacts
         uses: actions/download-artifact@v3
