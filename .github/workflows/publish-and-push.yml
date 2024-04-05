@@ -33,7 +33,7 @@ jobs:
       - name: Build Docker Image
         run: docker build . --file Dockerfile --tag $IMAGE_NAME
 
-      - if: github.event_name != 'pull_request'
+      - #if: github.event_name != 'pull_request'
         name: Push Docker Image
         id: push-image
         run: |
@@ -46,7 +46,7 @@ jobs:
           docker push $IMAGE_NAME:$VERSION
           docker push $IMAGE_NAME
           echo "::set-output name=commit::$VERSION"
-      - if: github.event_name != 'pull_request'
+      - #if: github.event_name != 'pull_request'
         name: Publish Deployment Artifacts
         uses: actions/upload-artifact@v3
         with:
