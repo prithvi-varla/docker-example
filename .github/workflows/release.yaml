@@ -1,14 +1,26 @@
 name: CD
 
 on:
+  #pull_request:
+  #  branches: [master]
+  #workflow_dispatch:
+
   workflow_run:
     workflows: [ "CI" ]
     types:
       - completed
 
 jobs:
+
+  pre-release:
+    name: Pre-Release
+    uses: ./.github/workflows/publish-and-push.yml
+
   deploy:
     name: Deploy
+    needs: pre-release
+    permissions:
+      id-token: write
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
