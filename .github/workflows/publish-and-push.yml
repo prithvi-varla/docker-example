@@ -56,7 +56,7 @@ jobs:
 
   deploy:
     name: Deploy
-    # needs: pre-release
+    needs: build-and-push
     permissions:
       id-token: write
     runs-on: ubuntu-latest
