@@ -48,7 +48,7 @@ jobs:
           echo "::set-output name=commit::$VERSION"
       - #if: github.event_name != 'pull_request'
         name: Publish Deployment Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: deployment-artifacts
           path: |
