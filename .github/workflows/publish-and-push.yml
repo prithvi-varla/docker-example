@@ -54,10 +54,25 @@ jobs:
           path: |
             deployment
 
+  deploy:
+    name: Deploy
+    # needs: pre-release
+    permissions:
+      id-token: write
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      max-parallel: 2
+      matrix:
+        environment: [ Dev ]
+        region: [ us-east-2 ]
+    environment:
+      name: ${{ matrix.environment }}
+    steps:
       - name: Download Deployment Artifacts
         uses: actions/download-artifact@v4
         with:
-          name: deployment-artifacts
+          name: deployment-artifactsd
           path: |
             deployment
 
@@ -80,7 +95,8 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: ${{ matrix.region }}
-          role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Update KubeConfig
         shell: bash
