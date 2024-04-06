@@ -35,6 +35,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: deployment-artifacts
+          path: |
+            deployment
 
       - name: Substitute Values In Deployment Files
         uses: cschleiden/replace-tokens@v1
