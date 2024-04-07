@@ -81,7 +81,7 @@ jobs:
           tokenSuffix: '}'
           files: '["cloud/deployment.yaml"]'
         env:
-          COMMIT: ${{ needs.pre-release.outputs.commit }}
+          COMMIT: ${{ needs.build-and-push.outputs.commit }}
 
       - name: Configure Kubectl
         uses: azure/setup-kubectl@v2.0
