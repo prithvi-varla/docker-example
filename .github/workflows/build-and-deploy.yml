@@ -1,4 +1,4 @@
-name: CI
+name: CI_CD
 
 on:
   pull_request:
@@ -12,7 +12,6 @@ on:
 
 env:
   IMAGE_NAME: ghcr.io/${{ github.repository }}
-
 
 jobs:
   build-and-push:
@@ -42,7 +41,7 @@ jobs:
           VERSION=${GITHUB_SHA::8}
           echo IMAGE_NAME=$IMAGE_NAME
           echo VERSION=$VERSION
-          docker tag $IMAGE_NAME $IMAGE_NAME:$VERSION 
+          docker tag d $IMAGE_NAME:$VERSION 
           docker push $IMAGE_NAME:$VERSION
           docker push $IMAGE_NAME
           echo "::set-output name=commit::$VERSION"
