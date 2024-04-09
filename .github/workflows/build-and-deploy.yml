@@ -39,9 +39,12 @@ jobs:
           echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
           # Get Short commit id
           VERSION=${GITHUB_SHA::8}
+          echo SHORT_COMMIT = ${{ jobs.build-and-push.outputs.commit }}
+          echo PUSH-IMAGE = ${{ steps.push-image.outputs.commit }}
+          echo COMMIT_SHA = ${GITHUB_SHA}
           echo IMAGE_NAME=$IMAGE_NAME
           echo VERSION=$VERSION
-          docker tag d $IMAGE_NAME:$VERSION 
+          docker tag $IMAGE_NAME:$VERSION 
           docker push $IMAGE_NAME:$VERSION
           docker push $IMAGE_NAME
           echo "::set-output name=commit::$VERSION"
