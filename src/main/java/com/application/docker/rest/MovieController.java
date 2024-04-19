@@ -20,7 +20,7 @@ public class MovieController {
   @PostMapping
   public ResponseEntity get(@RequestBody final MovieDto movieDto) {
     Movie movie = getMovieToCreate(movieDto);
-    Movie createdMovie = movieService.create(movie);d
+    Movie createdMovie = movieService.create(movie);
     return ResponseEntity.ok(MovieDto.builder()
         .movieName(createdMovie.getMovieName())
         .category(createdMovie.getCategory())

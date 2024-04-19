@@ -1,0 +1,106 @@
+name: CI_CD
+
+on:
+  pull_request:
+    branches: [master]
+  workflow_call:
+    outputs:
+      commit:
+        description: "Short Commit Id"
+        value: ${{ jobs.build-and-push.outputs.commit }}
+  workflow_dispatch:
+
+env:
+  IMAGE_NAME: ghcr.io/${{ github.repository }}
+
+jobs:
+  build-and-push:
+    name: Build & Push Docker Image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      commit: ${{ steps.push-image.outputs.commit }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build project with Maven
+        run: mvn clean install
+
+      - name: Build Docker Image
+        run: docker build . --file Dockerfile --tag $IMAGE_NAME
+
+      - #if: github.event_name != 'pull_request'
+        name: Push Docker Image
+        id: push-image
+        run: |
+          echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          # Get Short commit id
+          VERSION=${GITHUB_SHA::8}
+          echo COMMIT_SHA = ${GITHUB_SHA}
+          echo IMAGE_NAME=$IMAGE_NAME
+          echo VERSION=$VERSION
+          docker tag $IMAGE_NAME $IMAGE_NAME:$VERSION  
+          docker push $IMAGE_NAME:$VERSION
+          docker push $IMAGE_NAME
+          echo "::set-output name=commit::$VERSION"
+      - #if: github.event_name != 'pull_request'
+        name: Publish Deployment Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-artifacts
+          path: |
+            deployment
+
+  deploy:
+    name: Deploy
+    needs: build-and-push
+    permissions:
+      id-token: write
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      max-parallel: 2
+      matrix:
+        environment: [ Dev ]
+        region: [ us-east-2 ]
+    environment:
+      name: ${{ matrix.environment }}
+    steps:
+      - name: Download Deployment Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: deployment-artifacts
+
+      - name: Substitute Values In Deployment Files
+        uses: cschleiden/replace-tokens@v1
+        with:
+          tokenPrefix: '${'
+          tokenSuffix: '}'
+          files: '["cloud/deployment.yaml"]'
+        env:
+          COMMIT: ${{ needs.build-and-push.outputs.commit }}
+
+      - name: Configure Kubectl
+        uses: azure/setup-kubectl@v2.0
+        with:
+          version: 'v1.23.6'
+        id: install
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ${{ matrix.region }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Update KubeConfig
+        shell: bash
+        run: |
+          aws eks update-kubeconfig --name ${{ secrets.AWS_CLUSTER_NAME }} --region=${{ matrix.region }}
+
+      - name: Deploy To Cluster
+        shell: bash
+        run: kubectl apply -n default -f cloud/
