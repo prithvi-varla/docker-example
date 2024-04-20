@@ -105,18 +105,28 @@ jobs:
         shell: bash
         run: helm list
 
-      - name: Deploy Helm
+      - name: Install Helm Chart
         uses: bitovi/github-actions-deploy-eks-helm@v1.2.9
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ matrix.region }}
           cluster-name: ${{ secrets.AWS_CLUSTER_NAME }}
-          config-files: ./charts/values.yaml
-          chart-path: charts/
+          chart-path: charts
           namespace: default
-          name: docker-example
+          name: vprofile-stack
 
-      - name: Deploy To Cluster
-        shell: bash
-        run: kubectl apply -n default -f cloud/
+
+#      - name: Deploy Helm
+#        uses: bitovi/github-actions-deploy-eks-helm@v1.2.9
+#        with:
+#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          aws-region: ${{ matrix.region }}
+#          cluster-name: ${{ secrets.AWS_CLUSTER_NAME }}
+#          config-files: ./charts/values.yaml
+#          chart-path: charts/
+#          namespace: default
+#          name: docker-example
+#
+#      - name: Deploy To Cluster
+#        shell: bash
+#        run: kubectl apply -n default -f cloud/
