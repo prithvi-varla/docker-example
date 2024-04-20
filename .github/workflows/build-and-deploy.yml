@@ -116,7 +116,7 @@ jobs:
           chart-path: charts/
           namespace: default
           values: key1=value1,key2=value2
-          name: docker-example
+          name: pr-${{ github.event.number }}
 
       - name: Deploy To Cluster
         shell: bash
