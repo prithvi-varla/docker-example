@@ -115,8 +115,7 @@ jobs:
           config-files: ./charts/values.yaml
           chart-path: charts/
           namespace: default
-          values: key1=value1,key2=value2
-          name: pr-${{ github.event.number }}
+          name: vprofile-stack
 
       - name: Deploy To Cluster
         shell: bash
