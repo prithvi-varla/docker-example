@@ -112,7 +112,7 @@ jobs:
           chart-path: charts/
           namespace: default
           values: key1=value1,key2=value2
-          name: {{ .Release.Name }}
+          name: default
 
       - name: Deploy To Cluster
         shell: bash
