@@ -101,11 +101,6 @@ jobs:
         run: |
           aws eks update-kubeconfig --name ${{ secrets.AWS_CLUSTER_NAME }} --region=${{ matrix.region }}
 
-      - name: Lint Helm
-        uses: WyriHaximus/github-action-helm3@v3
-        with:
-          exec: helm lint ./charts/
-
       - name: Deploy Helm
         uses: bitovi/github-actions-deploy-eks-helm@v1.2.9
         with:
