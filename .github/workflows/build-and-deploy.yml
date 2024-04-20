@@ -110,7 +110,8 @@ jobs:
         with:
           aws-region: ${{ matrix.region }}
           cluster-name: ${{ secrets.AWS_CLUSTER_NAME }}
-          chart-path: helm/docker-example
+          config-files: docker-example/helm/values.yaml
+          chart-path: docker-example/helm
           namespace: default
           values: appimage=ghcr.io/prithvi-varla/docker-example:${{ env.COMMIT }}
           name: docker-example
