@@ -115,7 +115,7 @@ jobs:
           config-files: ./charts/values.yaml
           chart-path: charts/
           namespace: default
-          name: vprofile-stack
+          name: docker-example
 
       - name: Deploy To Cluster
         shell: bash
