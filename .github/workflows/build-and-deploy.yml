@@ -101,6 +101,10 @@ jobs:
         run: |
           aws eks update-kubeconfig --name ${{ secrets.AWS_CLUSTER_NAME }} --region=${{ matrix.region }}
 
+      - name: helm list
+        shell: bash
+        run: helm list
+
       - name: Deploy Helm
         uses: bitovi/github-actions-deploy-eks-helm@v1.2.9
         with:
