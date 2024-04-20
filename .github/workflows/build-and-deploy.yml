@@ -101,6 +101,24 @@ jobs:
         run: |
           aws eks update-kubeconfig --name ${{ secrets.AWS_CLUSTER_NAME }} --region=${{ matrix.region }}
 
+      - name: Lint Helm
+        uses: WyriHaximus/github-action-helm3@v3
+        with:
+          exec: helm lint ./charts/
+
+      - name: Deploy Helm
+        uses: bitovi/github-actions-deploy-eks-helm@v1.2.9
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ matrix.region }}
+          cluster-name: ${{ secrets.AWS_CLUSTER_NAME }}
+          config-files: ./charts/values.yaml
+          chart-path: charts/
+          namespace: default
+          values: key1=value1,key2=value2
+          name: test_1
+
       - name: Deploy To Cluster
         shell: bash
         run: kubectl apply -n default -f cloud/
