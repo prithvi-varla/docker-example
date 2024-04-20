@@ -110,7 +110,7 @@ jobs:
         with:
           aws-region: ${{ matrix.region }}
           cluster-name: ${{ secrets.AWS_CLUSTER_NAME }}
-          chart-path: helm/docker-example-charts
+          chart-path: helm/docker-example
           namespace: default
           name: vprofile-stack
 
