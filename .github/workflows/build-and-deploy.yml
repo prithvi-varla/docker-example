@@ -3,17 +3,11 @@ name: CI_CD
 on:
   pull_request:
     branches: [master]
-  workflow_call:
-    outputs:
-      commit:
-        description: "Short Commit Id"
-        value: ${{ jobs.build-and-push.outputs.commit }}
   workflow_dispatch:
 
-env:
-  IMAGE_NAME: ghcr.io/${{ github.repository }}
 
 jobs:
+
   deploy:
     name: Deploy
     permissions:
