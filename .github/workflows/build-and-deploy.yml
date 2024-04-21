@@ -1,13 +1,18 @@
 name: CI_CD
-
 on:
   pull_request:
     branches: [master]
+  workflow_call:
+    outputs:
+      commit:
+        description: "Short Commit Id"
+        value: ${{ jobs.build-and-push.outputs.commit }}
   workflow_dispatch:
 
+env:
+  IMAGE_NAME: ghcr.io/${{ github.repository }}
 
 jobs:
-
   deploy:
     name: Deploy
     permissions:
@@ -22,6 +27,8 @@ jobs:
     environment:
       name: ${{ matrix.environment }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -35,5 +42,3 @@ jobs:
           cluster-name: ${{ secrets.AWS_CLUSTER_NAME }}
           name: hello-world
           chart-path: helm
-
-
