@@ -114,7 +114,6 @@ jobs:
           cluster-name: ${{ secrets.AWS_CLUSTER_NAME }}
           config-files: docker-example/helm/values.yaml
           namespace: default
-          chart-path: docker-example/helm
           name: docker-example
 
 
