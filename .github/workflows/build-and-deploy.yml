@@ -69,19 +69,7 @@ jobs:
     environment:
       name: ${{ matrix.environment }}
     steps:
-      - name: Download Deployment Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: deployment-artifacts
 
-      - name: Substitute Values In Deployment Files
-        uses: cschleiden/replace-tokens@v1
-        with:
-          tokenPrefix: '${'
-          tokenSuffix: '}'
-          files: '["cloud/deployment.yaml"]'
-        env:
-          COMMIT: ${{ needs.build-and-push.outputs.commit }}
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
