@@ -39,7 +39,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 3000
+  port: 8080
 
 ingress:
   enabled: false
@@ -108,4 +108,4 @@ healthchecks:
   enabled: true
   path: /health
   port: http
-  initialDelaySeconds: 600
+  initialDelaySeconds: 30
