@@ -108,4 +108,4 @@ healthchecks:
   enabled: true
   path: /health
   port: http
-  initialDelaySeconds: 30
+  initialDelaySeconds: 600
