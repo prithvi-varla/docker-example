@@ -83,5 +83,5 @@ jobs:
         with:
           aws-region: ${{ matrix.region }}
           cluster-name: ${{ secrets.AWS_CLUSTER_NAME }}
-          name: hello-world
+          name: docker-example-name
           chart-path: helm
