@@ -4,20 +4,17 @@ import com.application.docker.dto.MovieDto;
 import com.application.docker.persistence.model.Movie;
 import com.application.docker.service.IMovieService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("api/v1/movie")
 public class MovieController {
 
   private IMovieService movieService;
 
-  @PostMapping
+  @PostMapping("api/v1/movie")
   public ResponseEntity get(@RequestBody final MovieDto movieDto) {
     Movie movie = getMovieToCreate(movieDto);
     Movie createdMovie = movieService.create(movie);
@@ -33,4 +30,11 @@ public class MovieController {
         .category(movieDto.getCategory())
         .build();
   }
+
+  @GetMapping("/health")
+  @ResponseStatus(HttpStatus.OK)
+  private String getMovieToCreate() {
+    return "Healthy";
+  }
+
 }
